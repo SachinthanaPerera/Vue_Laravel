@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class Patient extends Model
 {
     use HasFactory;
-    protected $fillable =['name','icon','description'];
+    protected $fillable =['name','dob','mobile','address'];
 }

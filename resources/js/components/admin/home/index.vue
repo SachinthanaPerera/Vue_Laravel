@@ -16,51 +16,9 @@ import Base from "../layouts/base.vue";
             <div class="main__sideNav"></div>
             <!-- End Side Nav -->
             <!-- Main Content -->
-            <div class="main__content">
-                <!-- ==================-->
-                <!-- Overview Page -->
 
-                           <h1>Find A JOB</h1>
-
-
-            <!--==================== ABOUT ====================-->
-
-
-            <!--==================== SKILLS ====================-->
-            <section class="skills section" id="skills">
-
-            </section>
-
-            <!--==================== QUALIFICATION ====================-->
-            <section class="qualification section">
-
-            </section>
-
-            <!--==================== SERVICES ====================-->
-            <section class="services section" id="services">
-
-            </section>
-
-            <!--==================== PORTFOLIO ====================-->
-            <section class="portfolio section" id="portfolio">
-
-            </section>
-
-            <!--==================== PROJECT IN MIND ====================-->
-            <section class="project section">
-
-            </section>
-
-            <!--==================== TESTIMONIAL ====================-->
-            <section class="testimonial section">
-
-            </section>
-
-            <!--==================== CONTACT ME ====================-->
-            <section class="contact section" id="contact">
-
-            </section>
-            </div>
+<img :src="'../storage/img/home.jpg'" height="770">
+<!-- <img src="/img/ic_add-sm.svg"> -->
         </main>
 
         <!--==================== FOOTER ====================-->

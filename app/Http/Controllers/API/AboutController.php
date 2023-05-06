@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\API;
 
+use Exception;
+use App\Models\User;
 use App\Models\About;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
-use Exception;
+
 class AboutController extends Controller
 {
     public function edit_about(){
-        return About::orderBy('id','desc')->first();
+        return User::orderBy('id','desc')->first();
     }
 
     public function update_about(Request $request,$id){
         try {
 
-        $about=About::find($id);
+        $about=User::find($id);
         $this->validate($request,[
             'name'=>'required',
             'email'=>'required'

@@ -1,86 +1,47 @@
 <script setup>
 import Base from "../layouts/base.vue";
 import { onMounted, ref } from "vue";
+
+let skills = ref([]);
 let services = ref([]);
 const showModal = ref(false);
 const hideModal = ref(true);
-const editMode = ref(false);
 let form = ref({
     name: "",
-    icon: "",
-    description: "",
+    proficiency: "",
+    service_id: "",
 });
 onMounted(async () => {
+    getSkills();
     getServices();
 });
-
+const getSkills = async () => {
+    let response = await axios.get("/api/get_all_skill");
+    console.log("response", response);
+    skills.value = response.data.skills;
+};
 const getServices = async () => {
     let response = await axios.get("/api/get_all_service");
     console.log("response", response);
     services.value = response.data.services;
 };
-
 const openModal = () => {
     showModal.value = !showModal.value;
 };
 
 const closeModal = () => {
     showModal.value = !hideModal.value;
-    form.value = {};
-    editMode.value = false;
 };
-//   .post(`/api/update_about/${form.value.id}`, form.value)
-const createService = async () => {
-    console.log('ok');
-    await axios.post("/api/create_service", form.value).then((response) => {
-        getServices();
+const createSkill = async () => {
+    await axios.post("/api/create_skill", form.value).then((response) => {
+        getSkills();
         closeModal();
         toast.fire({
             icon: "success",
-            title: "Service add Successfully",
+            title: "Skill add successfully",
         });
     });
 };
-const editModal = (service) => {
-    editMode.value = true;
-    showModal.value = !showModal.value;
-    form.value = service;
-};
-const updateService = async()=>{
-    await axios.post('/api/update_service/'+form.value.id, form.value)
-    .then(()=>{
-        getServices()
-        closeModal()
-        toast.fire({
-            icon:"success",
-            title:"Service update successfully"
-        })
-    })
-}
-const deleteService= (id)=>{
-    Swal.fire({
-        title:'Are you sure?',
-        text:"You can't go back",
-        icon:'warning',
-        showCancelButton:true,
-        confirmButtonColor:'#3085d6',
-        cancelButtonColor:'#d33',
-        confirmButtonText:'Yes, delete it!'
-    })
-    .then((result)=>{
-        if(result.value){
-            axios.get('/api/delete_service/'+id)
-            .then(()=>{
-                Swal.fire(
-                    'Delete',
-                    'Service delete successfully',
-                    'success'
-                )
-                getServices()
-            })
-        }
-    })
-}
 </script>
 <template>
     <Base />
@@ -90,18 +51,15 @@ const deleteService= (id)=>{
         <!-- End Side Nav -->
         <!-- Main Content -->
         <div class="main__content">
-            <section class="services section" id="services">
-                <div class="services_container">
+            <section class="skills section" id="skills">
+                <div class="skills_container">
                     <div class="titlebar">
                         <div class="titlebar_item">
-                            <h1>Services</h1>
+                            <h1>Skills</h1>
                         </div>
                         <div class="titlebar_item">
-                            <div
-                                class="btn btn__open--modal"
-                                @click="openModal()"
-                            >
-                                New Service
+                            <div class="btn" @click="openModal()">
+                                New Skill
                             </div>
                         </div>
                     </div>
@@ -141,44 +99,45 @@ const deleteService= (id)=>{
                                 <input
                                     class="table_search--input"
                                     type="text"
-                                    placeholder="Search Service"
+                                    placeholder="Search Skill"
                                 />
                             </div>
                         </div>
 
-                        <div class="service_table-heading">
-                            <p>Title</p>
-                            <p>Icon</p>
-                            <p>Description</p>
+                        <div class="skill_table-heading">
+                            <p>Name</p>
+                            <p>Proficiency</p>
+                            <p>Service</p>
                             <p>Actions</p>
                         </div>
                         <!-- item 1 -->
                         <div
-                            class="service_table-items"
-                            v-for="item in services"
+                            class="skill_table-items"
+                            v-for="item in skills"
                             :key="item.id"
-                            v-if="services.length > 0"
+                            v-if="skills.length > 0"
                         >
                             <p>{{ item.name }}</p>
-                            <button class="service_table-icon">
-                                <i class="{{ item.icon }}"></i>
-                            </button>
-                            <p>{{ item.description }}</p>
+                            <div class="table_skills-bar">
+                                <span
+                                    class="table_skills-percentage"
+                                    :style="{ width: `${item.proficiency}%` }"
+                                ></span>
+                                <strong>{{ item.proficiency }}%</strong>
+                            </div>
+                            <p v-if="item.service">{{ item.service.name }}</p>
                             <div>
-                                <button
-                                    class="btn-icon success"
-                                    @click="editModal(item)"
-                                >
+                                <button class="btn-icon success">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
-                                <button class="btn-icon danger" @click="deleteService(item.id)">
+                                <button class="btn-icon danger">
                                     <i class="far fa-trash-alt"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-------------- SERVICES MODAL ---------------->
+                <!--SERVICES MODAL -->
                 <div class="modal main__modal" :class="{ show: showModal }">
                     <div class="modal__content">
                         <span
@@ -186,49 +145,45 @@ const deleteService= (id)=>{
                             @click="closeModal()"
                             >×</span
                         >
-                        <h3 class="modal__title" v-show="editMode == false">
-                            Add Service
-                        </h3>
-                        <h3 class="modal__title" v-show="editMode == true">
-                            Update Service
-                        </h3>
+                        <h3 class="modal__title">Add Skill</h3>
                         <hr class="modal_line" />
                         <br />
-                        <!-- <form
-                            @submit.prevent="
-                                editMode.value
-                                    ? createService()
-                                    : updateService()
-                            "
-                        > -->
-                        <form
-                            @submit.prevent="createService()
-                            "
-                        >
+                        <form @submit.prevent="createSkill()">
                             <div>
-                                <p>Service Name</p>
-                                <input
+                                <p>Name</p>
+                                <select type="text"
+                                    class="input"
+                                    v-model="form.name">
+                                    @fore
+                                    </select>
+                                <!-- <input
                                     type="text"
                                     class="input"
                                     v-model="form.name"
-                                />
+                                /> -->
 
-                                <p>Icon Class</p>
+                                <p>Proficiency</p>
                                 <input
                                     type="text"
                                     class="input"
-                                    v-model="form.icon"
+                                    v-model="form.proficiency"
                                 />
-                                <span style="color: #006fbb"
-                                    >Find your suitable icon: Font Awesome</span
-                                >
 
-                                <p>Description</p>
-                                <textarea
-                                    cols="10"
-                                    rows="5"
-                                    v-model="form.description"
-                                ></textarea>
+                                <p>Service</p>
+                                <select
+                                    class="inputSelect"
+                                    name=""
+                                    v-model="form.service_id"
+                                >
+                                    <option disabled>Select Service</option>
+                                    <option
+                                        :value="service.id"
+                                        v-for="service in services"
+                                        :key="service.id"
+                                    >
+                                        {{ service.name }}
+                                    </option>
+                                </select>
                             </div>
                             <br />
                             <hr class="modal_line" />
@@ -240,16 +195,9 @@ const deleteService= (id)=>{
                                     Cancel
                                 </button>
                                 <button
-                                    class="btn btn-secondary"
-                                    v-show="editMode == false"
+                                    class="btn btn-secondary btn__close--modal"
                                 >
                                     Save
-                                </button>
-                                <button
-                                    class="btn btn-secondary"
-                                    v-show="editMode == true"
-                                >
-                                    Update
                                 </button>
                             </div>
                         </form>

@@ -19,7 +19,7 @@
                     <li class="nav_item">
                         <router-link class="nav_link " to="/admin/about">
                             <span class="nav_link--span--icon">
-                                <i class="fas fa-home nav__link--icon"> </i>
+                                <i class="fas fa-user nav__link--icon"> </i>
                             </span>
                             <span class="nav_link--span--navname">
                                 My Profile
@@ -27,22 +27,22 @@
                         </router-link>
                     </li>
                     <li class="nav_item">
-                        <router-link class="nav_link " to="/admin/services">
+                        <router-link class="nav_link " to="/admin/patients">
                             <span class="nav_link--span--icon">
-                                <i class="fas fa-home nav__link--icon"> </i>
+                                <i class="fas fa-users nav__link--icon"> </i>
                             </span>
                             <span class="nav_link--span--navname">
-                                Services
+                                Patients
                             </span>
                         </router-link>
                     </li>
                       <li class="nav_item">
-                        <router-link class="nav_link " to="/admin/skills">
+                        <router-link class="nav_link " to="/admin/prescriptions">
                             <span class="nav_link--span--icon">
-                                <i class="fas fa-home nav__link--icon"> </i>
+                                <i class="fas fa-file-prescription nav__link--icon"> </i>
                             </span>
                             <span class="nav_link--span--navname">
-                                Skills
+                                Prescriptions
                             </span>
                         </router-link>
                     </li>

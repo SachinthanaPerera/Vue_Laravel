@@ -8,7 +8,6 @@ let form = reactive({
     email:'',
     password:'',
 })
-
 let error= ref('');
 const login = async() =>{
     await axios.post('/api/login',form)
@@ -20,7 +19,6 @@ const login = async() =>{
         }else{
             console.log(response);
             error.value = response.data.message;
-
         }
     })
 }
